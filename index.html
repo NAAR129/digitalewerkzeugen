@@ -3,259 +3,272 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Digitale Werkzeugen im Mathematiksunterricht</title>
+<title>Digitale Werkzeuge im Mathematiksunterricht</title>
 
 <style>
-:root{
-  --b1:#2b6cb0;
-  --b2:#1f4e79;
-  --t1:#2a9d8f;
-  --o1:#f4a261;
-  --o2:#e76f51;
+  :root{
+    --text:#fff;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --shadow2: 0 18px 50px rgba(0,0,0,.55);
+    --radius: 22px;
+  }
 
-  --text:#fff;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
-  --shadow2:0 18px 50px rgba(0,0,0,.55);
-  --radius:22px;
-}
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    text-align:center;
 
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  color:var(--text);
-  text-align:center;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,0.10), transparent 40%),
+      linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.60)),
+      url("fondo.png") center/cover no-repeat fixed;
 
-  background:
-    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.12), transparent 40%),
-    linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.60)),
-    url("fondo.png") center/cover no-repeat fixed;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: 30px 14px;
+    box-sizing:border-box;
+  }
 
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:30px 14px;
-  box-sizing:border-box;
-}
+  h1{
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin: 0 0 10px 0;
+    text-shadow: 0 6px 18px rgba(0,0,0,.55);
+  }
 
-/* ===== TITULO ===== */
-h1{
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  margin:0 0 10px 0;
-  text-shadow:0 6px 18px rgba(0,0,0,.55);
-}
+  .subtitle{
+    max-width: 920px;
+    margin: 0 0 22px 0;
+    opacity: .92;
+    line-height: 1.45;
+    font-size: clamp(.95rem, 1.2vw, 1.05rem);
+  }
 
-.subtitle{
-  max-width:900px;
-  margin:0 0 22px 0;
-  opacity:.92;
-  line-height:1.45;
-  font-size:clamp(.95rem,1.2vw,1.05rem);
-}
+  .apps{
+    width: min(1000px, 95vw);
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
 
-/* ===== GRID RESPONSIVE ===== */
-.apps{
-  width:min(1000px,95vw);
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-}
+  /* ===== TARJETAS (sin íconos) ===== */
+  .card{
+    position: relative;
+    border-radius: var(--radius);
+    padding: 18px 18px 16px 18px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    overflow: hidden;
 
-/* ===== TARJETAS ===== */
-.card{
-  position:relative;
-  border-radius:var(--radius);
-  padding:18px 18px 16px 18px;
-  cursor:pointer;
-  box-shadow:var(--shadow);
-  overflow:hidden;
+    /* glass */
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(8px);
+    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    outline: none;
+    user-select: none;
 
-  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
-  outline:none;
-}
+    /* borde degradado elegante */
+    border: 1px solid rgba(255,255,255,0.18);
+  }
 
-.card:hover{
-  transform:translateY(-8px);
-  box-shadow:var(--shadow2);
-  filter:saturate(1.05);
-}
+  /* Borde con gradiente usando pseudo-elemento */
+  .card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    padding:1px;               /* grosor del borde */
+    border-radius: var(--radius);
+    background: var(--grad, linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,.10)));
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events:none;
+    opacity: .95;
+  }
 
-.card:focus-visible{
-  box-shadow:0 0 0 3px rgba(255,255,255,.6),var(--shadow2);
-}
+  /* “tinte” suave de color dentro, pero transparente */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: var(--tint, rgba(255,255,255,.06));
+    opacity: .85;
+    pointer-events:none;
+  }
 
-/* brillo dinámico */
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:radial-gradient(circle at var(--mx,30%) var(--my,30%),
-            rgba(255,255,255,.25),transparent 45%);
-  opacity:0;
-  transition:opacity .25s ease;
-  pointer-events:none;
-}
-.card:hover::before{ opacity:1; }
+  .card:hover{
+    transform: translateY(-8px);
+    box-shadow: var(--shadow2);
+    filter: saturate(1.08);
+  }
 
-.top{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:10px;
-}
+  .card:focus-visible{
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55), var(--shadow2);
+  }
 
-.icon{
-  width:46px;
-  height:46px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  font-size:20px;
-  font-weight:700;
-  box-shadow:0 10px 24px rgba(0,0,0,.3);
-}
+  .title{
+    text-align:left;
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin: 0 0 8px 0;
+    position: relative;
+    z-index: 1;
+  }
 
-.title{
-  text-align:left;
-  font-size:1.15rem;
-  font-weight:800;
-  margin:0;
-}
+  .desc{
+    text-align:left;
+    margin: 0;
+    opacity: .92;
+    line-height: 1.35;
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+  }
 
-.desc{
-  text-align:left;
-  margin:0;
-  opacity:.92;
-  line-height:1.35;
-  font-size:.95rem;
-}
+  .tag{
+    display:inline-block;
+    margin-top: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: .82rem;
+    background: rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.18);
+    opacity: .95;
+    position: relative;
+    z-index: 1;
+  }
 
-.tag{
-  display:inline-block;
-  margin-top:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:.8rem;
-  background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.18);
-}
+  /* ===== Colores lindos (resaltan pero siguen transparentes) ===== */
+  .c1{ --grad: linear-gradient(135deg, rgba(72,149,239,.85), rgba(67,97,238,.25));
+       --tint: linear-gradient(135deg, rgba(72,149,239,.18), rgba(255,255,255,.02)); }
+  .c2{ --grad: linear-gradient(135deg, rgba(0,180,216,.85), rgba(0,119,182,.25));
+       --tint: linear-gradient(135deg, rgba(0,180,216,.18), rgba(255,255,255,.02)); }
+  .c3{ --grad: linear-gradient(135deg, rgba(76,201,240,.75), rgba(58,12,163,.22));
+       --tint: linear-gradient(135deg, rgba(58,12,163,.14), rgba(255,255,255,.02)); }
+  .c4{ --grad: linear-gradient(135deg, rgba(255,183,3,.85), rgba(251,133,0,.25));
+       --tint: linear-gradient(135deg, rgba(255,183,3,.18), rgba(255,255,255,.02)); }
+  .c5{ --grad: linear-gradient(135deg, rgba(255,107,107,.85), rgba(255,209,102,.22));
+       --tint: linear-gradient(135deg, rgba(255,107,107,.16), rgba(255,255,255,.02)); }
+  .c6{ --grad: linear-gradient(135deg, rgba(6,214,160,.80), rgba(17,138,178,.25));
+       --tint: linear-gradient(135deg, rgba(6,214,160,.16), rgba(255,255,255,.02)); }
+  .c7{ --grad: linear-gradient(135deg, rgba(131,56,236,.80), rgba(255,0,110,.22));
+       --tint: linear-gradient(135deg, rgba(255,0,110,.14), rgba(255,255,255,.02)); }
 
-/* colores por tarjeta */
-.c1 .icon{ background:linear-gradient(135deg,var(--b1),var(--b2)); }
-.c2 .icon{ background:linear-gradient(135deg,var(--t1),var(--b1)); }
-.c3 .icon{ background:linear-gradient(135deg,var(--b2),#123a5a); }
-.c4 .icon{ background:linear-gradient(135deg,var(--o1),var(--o2)); color:#1b1b1b; }
-.c5 .icon{ background:linear-gradient(135deg,var(--o2),#b94b35); }
-.c6 .icon{ background:linear-gradient(135deg,var(--b1),var(--t1)); }
-.c7 .icon{ background:linear-gradient(135deg,var(--t1),#1f6f63); }
+  footer{
+    margin-top: 28px;
+    opacity: .9;
+    font-size: .9rem;
+    text-align:center;
+    text-shadow: 0 6px 18px rgba(0,0,0,.45);
+  }
 
-/* ===== FOOTER ===== */
-footer{
-  margin-top:28px;
-  opacity:.9;
-  font-size:.9rem;
-  text-align:center;
-}
+  @media (max-width: 700px){
+    .apps{ grid-template-columns: 1fr; }
+  }
 
-/* ===== AJUSTES MOVIL ===== */
-@media (max-width:600px){
-  body{ padding:24px 12px; }
-  .apps{ gap:14px; }
-  .card{ padding:16px; }
-  .icon{ width:42px;height:42px;font-size:18px; }
-}
+  @media (max-width: 600px){
+    body{ padding: 22px 12px; }
+    .card{ padding: 16px; }
+    .title{ font-size: 1.18rem; }
+    .desc{ font-size: .98rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ transition:none; }
+    .card:hover{ transform:none; }
+  }
 </style>
 </head>
 
 <body>
+  <h1>Digitale Werkzeuge im Mathematiksunterricht</h1>
+  <p class="subtitle">Wählen Sie eine der Lernwebseiten aus, die von den Studierenden des Seminars erstellt wurden.</p>
 
-<h1>Digitale Werkzeugen im Mathematiksunterricht</h1>
-<p class="subtitle">Wählen Sie eine der Lernwebseiten aus, die von den Studierenden des Seminars erstellt wurden..</p>
+  <div class="apps" id="appsContainer">
+    <div class="card c1" role="button" tabindex="0" data-app="app1" aria-label="App 1 öffnen">
+      <p class="title">App 1</p>
+      <p class="desc">Einführung & Beispiele</p>
+      <span class="tag">Start</span>
+    </div>
 
-<div class="apps" id="appsContainer">
+    <div class="card c2" role="button" tabindex="0" data-app="app2" aria-label="App 2 öffnen">
+      <p class="title">App 2</p>
+      <p class="desc">Darstellungen</p>
+      <span class="tag">Visual</span>
+    </div>
 
-  <div class="card c1" tabindex="0" data-app="app1">
-    <div class="top"><div class="icon">ƒ</div><p class="title">App 1</p></div>
-    <p class="desc">Einführung & Beispiele</p><span class="tag">Start</span>
+    <div class="card c3" role="button" tabindex="0" data-app="app3" aria-label="App 3 öffnen">
+      <p class="title">App 3</p>
+      <p class="desc">Graphen</p>
+      <span class="tag">Analyse</span>
+    </div>
+
+    <div class="card c4" role="button" tabindex="0" data-app="app4" aria-label="App 4 öffnen">
+      <p class="title">App 4</p>
+      <p class="desc">Parameter</p>
+      <span class="tag">Interaktiv</span>
+    </div>
+
+    <div class="card c5" role="button" tabindex="0" data-app="app5" aria-label="App 5 öffnen">
+      <p class="title">App 5</p>
+      <p class="desc">Übungen</p>
+      <span class="tag">Üben</span>
+    </div>
+
+    <div class="card c6" role="button" tabindex="0" data-app="app6" aria-label="App 6 öffnen">
+      <p class="title">App 6</p>
+      <p class="desc">Agregar enlace luego</p>
+      <span class="tag">Neu</span>
+    </div>
+
+    <div class="card c7" role="button" tabindex="0" data-app="app7" aria-label="App 7 öffnen">
+      <p class="title">App 7</p>
+      <p class="desc">Agregar enlace luego</p>
+      <span class="tag">Neu</span>
+    </div>
   </div>
 
-  <div class="card c2" tabindex="0" data-app="app2">
-    <div class="top"><div class="icon">∿</div><p class="title">App 2</p></div>
-    <p class="desc">Darstellungen</p><span class="tag">Visual</span>
-  </div>
-
-  <div class="card c3" tabindex="0" data-app="app3">
-    <div class="top"><div class="icon">📈</div><p class="title">App 3</p></div>
-    <p class="desc">Graphen</p><span class="tag">Analyse</span>
-  </div>
-
-  <div class="card c4" tabindex="0" data-app="app4">
-    <div class="top"><div class="icon">⚙️</div><p class="title">App 4</p></div>
-    <p class="desc">Parameter</p><span class="tag">Interaktiv</span>
-  </div>
-
-  <div class="card c5" tabindex="0" data-app="app5">
-    <div class="top"><div class="icon">✅</div><p class="title">App 5</p></div>
-    <p class="desc">Übungen</p><span class="tag">Üben</span>
-  </div>
-
-  <div class="card c6" tabindex="0" data-app="app6">
-    <div class="top"><div class="icon">🧩</div><p class="title">App 6</p></div>
-    <p class="desc">Agregar enlace luego</p><span class="tag">Neu</span>
-  </div>
-
-  <div class="card c7" tabindex="0" data-app="app7">
-    <div class="top"><div class="icon">⭐</div><p class="title">App 7</p></div>
-    <p class="desc">Agregar enlace luego</p><span class="tag">Neu</span>
-  </div>
-
-</div>
-
-<footer>
-© Dozent: Nicolás Alarcón-Relmucao
-</footer>
+  <footer>© Dozent: Nicolás Alarcón-Relmucao</footer>
 
 <script>
-const urls={
-  app1:'https://naar129.github.io/app1/',
-  app2:'https://naar129.github.io/app2/',
-  app3:'https://naar129.github.io/app3/',
-  app4:'https://naar129.github.io/app4/',
-  app5:'https://naar129.github.io/app5/',
-  app6:'#',
-  app7:'#'
-};
+  const urls = {
+    app1: 'https://naar129.github.io/app1/',
+    app2: 'https://naar129.github.io/app2/',
+    app3: 'https://naar129.github.io/app3/',
+    app4: 'https://naar129.github.io/app4/',
+    app5: 'https://naar129.github.io/app5/',
+    app6: '#', // pega tu link después
+    app7: '#'
+  };
 
-const container=document.getElementById('appsContainer');
+  const container = document.getElementById('appsContainer');
 
-container.addEventListener('click',e=>{
-  const card=e.target.closest('.card');
-  if(!card) return;
-  const url=urls[card.dataset.app];
-  if(url && url!=='#') window.location.href=url;
-});
-
-container.addEventListener('keydown',e=>{
-  const card=e.target.closest('.card');
-  if(!card) return;
-  if(e.key==='Enter' || e.key===' '){
-    e.preventDefault();
-    const url=urls[card.dataset.app];
-    if(url && url!=='#') window.location.href=url;
+  function openApp(key){
+    const url = urls[key];
+    if (!url || url === '#') return;
+    window.location.href = url;
   }
-});
 
-container.addEventListener('mousemove',e=>{
-  const card=e.target.closest('.card');
-  if(!card) return;
-  const r=card.getBoundingClientRect();
-  card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-  card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-});
+  container.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    openApp(card.dataset.app);
+  });
+
+  container.addEventListener('keydown', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openApp(card.dataset.app);
+    }
+  });
 </script>
-
 </body>
 </html>
