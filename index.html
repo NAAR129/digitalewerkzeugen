@@ -38,12 +38,22 @@ body{
 /* ===== CENTRADO REAL DEL CONTENIDO ===== */
 .page-wrapper{
   min-height:100vh;
-  width:100%;
+  width: min(1100px, 100%);
 
   display:flex;
   flex-direction:column;
-  justify-content:center;   /* centra verticalmente */
+  justify-content:center;
   align-items:center;
+
+  padding: 40px 28px;
+  border-radius: 28px;
+
+  background: rgba(10, 14, 25, 0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 25px 60px rgba(0,0,0,.55);
 }
 
 h1{
