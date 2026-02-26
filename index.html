@@ -64,24 +64,11 @@ h1{
 .apps{
   width: min(1000px, 95vw);
   display:grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas en desktop */
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 18px;
+
+  /* reduce sensación de espacio abajo */
   margin-bottom: 16px;
-}
-
-/* Centrar la fila de abajo (App5, App6, App7) en desktop */
-.apps .card:nth-child(5){ grid-column: 2; }
-.apps .card:nth-child(6){ grid-column: 3; }
-.apps .card:nth-child(7){ grid-column: 4; }
-
-/* Tablet: que vuelva a auto-fit (sin posiciones fijas) */
-@media (max-width: 980px){
-  .apps{
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  }
-  .apps .card{
-    grid-column: auto !important;
-  }
 }
 
 /* ===== TARJETAS ===== */
